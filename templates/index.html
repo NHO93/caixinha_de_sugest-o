@@ -4,36 +4,184 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Envio de Sugestão</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        /* Estilos Gerais */
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #e3f2fd; /* Azul claro */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh; /* Altura total da janela */
+        }
+
+        /* Centraliza verticalmente e horizontalmente */
+        html, body {
+            height: 100%; /* Garante que o body e html ocupem toda a tela */
+        }
+
+        .container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            width: 100%;
+        }
+
+        /* Container */
+        .container {
+            background-color: #ffffff; /* Fundo branco */
+            border-radius: 12px; /* Bordas arredondadas */
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2); /* Sombra suave */
+            width: 90%; /* Largura responsiva */
+            max-width: 500px; /* Largura máxima */
+            padding: 30px; /* Espaçamento interno */
+            text-align: center; /* Centralizar texto */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Título */
+        h1 {
+            color: #00796b; /* Verde escuro */
+            font-size: 28px; /* Tamanho do texto */
+            margin-bottom: 20px; /* Margem inferior */
+        }
+
+        /* Estilos do Textarea */
+        textarea {
+            width: 100%; /* Largura total */
+            max-width: 400px; /* Largura máxima para o textarea */
+            height: 150px; /* Altura fixa */
+            padding: 15px; /* Espaçamento interno */
+            border: 1px solid #b0bec5; /* Borda cinza claro */
+            border-radius: 6px; /* Bordas arredondadas */
+            resize: none; /* Impedir redimensionamento */
+            outline: none; /* Remover contorno */
+            font-size: 16px; /* Tamanho da fonte */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Sombra leve */
+        }
+
+        /* Efeito ao focar no Textarea */
+        textarea:focus {
+            border-color: #00796b; /* Verde escuro */
+            box-shadow: 0 0 5px rgba(0, 121, 107, 0.5); /* Sombra ao focar */
+        }
+
+        /* Botão de Envio */
+        button {
+            margin-top: 15px; /* Margem superior */
+            width: 100%; /* Largura total */
+            max-width: 400px; /* Largura máxima para o botão */
+            padding: 12px; /* Espaçamento interno */
+            background-color: #00796b; /* Verde escuro */
+            color: white; /* Texto branco */
+            border: none; /* Sem borda */
+            border-radius: 6px; /* Bordas arredondadas */
+            font-size: 16px; /* Tamanho da fonte */
+            cursor: pointer; /* Mão ao passar o mouse */
+            transition: background-color 0.3s ease; /* Transição suave */
+        }
+
+        /* Efeito ao passar o mouse sobre o botão */
+        button:hover {
+            background-color: #004d40; /* Verde mais escuro */
+        }
+
+        /* Estilos das Mensagens Flash */
+        #flash-messages {
+            margin-top: 20px; /* Margem superior */
+            transition: opacity 0.3s ease;
+        }
+
+        .alert {
+            padding: 15px; /* Espaçamento interno */
+            border-radius: 6px; /* Bordas arredondadas */
+            margin-bottom: 15px; /* Margem inferior */
+            font-size: 14px; /* Tamanho da fonte */
+            display: inline-block; /* Inline-block para permitir largura total */
+            width: 100%; /* Largura total */
+            max-width: 400px; /* Largura máxima para as mensagens */
+            opacity: 1; /* Opacidade inicial */
+            transition: opacity 0.5s ease-in-out; /* Transição suave */
+        }
+
+        /* Estilos de alerta */
+        .alert-success {
+            background-color: #d4edda; /* Verde claro */
+            color: #155724; /* Texto verde escuro */
+            border-left: 5px solid #28a745; /* Borda verde */
+        }
+
+        .alert-danger {
+            background-color: #f8d7da; /* Vermelho claro */
+            color: #721c24; /* Texto vermelho escuro */
+            border-left: 5px solid #dc3545; /* Borda vermelha */
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 24px; /* Tamanho do texto do título */
+            }
+
+            button {
+                padding: 10px; /* Espaçamento interno do botão */
+                font-size: 14px; /* Tamanho da fonte do botão */
+            }
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 20px; /* Tamanho do texto do título */
+            }
+
+            textarea {
+                height: 120px; /* Altura do textarea */
+            }
+
+            button {
+                font-size: 12px; /* Tamanho da fonte do botão */
+                padding: 8px; /* Espaçamento interno do botão */
+            }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Envie sua Sugestão</h1>
+    <div class="container-wrapper">
+        <div class="container">
+            <h1>Envie sua Sugestão</h1>
 
-        <!-- Exibe as mensagens flash -->
-        {% with messages = get_flashed_messages(with_categories=true) %}
-          {% if messages %}
+            <!-- Exibe as mensagens flash -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
             <div id="flash-messages">
-              {% for category, message in messages %}
+                {% for category, message in messages %}
                 <div class="alert alert-{{ category }}">{{ message }}</div>
-              {% endfor %}
+                {% endfor %}
             </div>
-          {% endif %}
-        {% endwith %}
+            {% endif %}
+            {% endwith %}
 
-        <!-- Formulário para enviar sugestões -->
-        <form action="/" method="POST">
-            <textarea name="suggestion" placeholder="Escreva sua sugestão" required></textarea>
-            <button type="submit">Enviar</button>
-        </form>
+            <!-- Formulário para enviar sugestões -->
+            <form action="/" method="POST">
+                <textarea name="suggestion" placeholder="Escreva sua sugestão" required></textarea>
+                <button type="submit">Enviar</button>
+            </form>
+        </div>
     </div>
 
     <script>
         // Remove as mensagens flash após 10 segundos
-        setTimeout(function() {
+        setTimeout(function () {
             const flashMessages = document.getElementById('flash-messages');
             if (flashMessages) {
-                flashMessages.style.display = 'none';
+                flashMessages.style.opacity = '0';
+                setTimeout(() => flashMessages.style.display = 'none', 500);
             }
         }, 10000); // 10000 ms = 10 segundos
     </script>
