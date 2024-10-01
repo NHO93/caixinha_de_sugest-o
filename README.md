@@ -18,7 +18,7 @@ Este projeto é uma aplicação web simples onde os usuários podem enviar suges
 
 1. **Clone o repositório:**
    ```bash
-   git clone https://github.com/seu-usuario/sistema-caixinha-sugestao.git
+   git clone https://github.com/NHO93/caixinha_de_sugestao.git
    cd sistema-caixinha-sugestao
    ```
 
