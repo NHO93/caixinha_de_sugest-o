@@ -9,7 +9,7 @@
 <body>
     <div class="container">
         <h1>Caixinha de Sugestao</h1>
-        
+        <br>
         <!-- Exibe a mensagem de sucesso, se existir -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
@@ -20,9 +20,10 @@
                 </div>
             {% endif %}
         {% endwith %}
-        
+        <br>
         <form action="/" method="POST">
             <textarea name="suggestion" placeholder="Digite sua sugestao aqui..." required></textarea>
+            <br>
             <button type="submit">Enviar Sugestao</button>
         </form>
     </div>
