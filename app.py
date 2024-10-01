@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 import smtplib
 import os
 from dotenv import load_dotenv
+from email.message import EmailMessage
 
 # Carrega variáveis de ambiente do arquivo .env
 load_dotenv()
@@ -16,15 +17,21 @@ EMAIL_PASSWORD = os.getenv('EMAIL_PASS')
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
-        suggestion = request.form['suggestion']
+        suggestion = request.form.get('suggestion', '').strip()
 
         # Verifica se a sugestão não está vazia
         if suggestion:
-            # Envia a sugestão via e-mail
-            send_email(suggestion)
+            try:
+                # Envia a sugestão via e-mail
+                send_email(suggestion)
 
-            # Exibe a mensagem de sucesso
-            flash('Sua sugestão foi enviada com sucesso!', 'success')
+                # Exibe a mensagem de sucesso
+                flash('Sua sugestão foi enviada com sucesso!', 'success')
+            except Exception as e:
+                # Exibe a mensagem de erro
+                flash('Houve um erro ao enviar sua sugestão. Por favor, tente novamente mais tarde.', 'danger')
+                # Opcional: Log o erro para depuração
+                app.logger.error(f'Erro ao enviar e-mail: {e}')
             return redirect(url_for('index'))
         else:
             flash('Por favor, insira uma sugestão.', 'danger')
@@ -32,18 +39,15 @@ def index():
     return render_template('index.html')
 
 def send_email(suggestion):
-    # Garantindo que a sugestão seja tratada como string UTF-8
-    suggestion_utf8 = suggestion.encode('utf-8', errors='ignore').decode('utf-8')
+    msg = EmailMessage()
+    msg['Subject'] = 'Nova Sugestão Anônima'
+    msg['From'] = EMAIL_ADDRESS
+    msg['To'] = EMAIL_ADDRESS
+    msg.set_content(f'Sugestão recebida: {suggestion}')
 
     with smtplib.SMTP_SSL('smtp.gmail.com', 465) as smtp:
         smtp.login(EMAIL_ADDRESS, EMAIL_PASSWORD)
-
-        subject = 'Nova Sugestão Anônima'
-        body = f'Sugestão recebida: {suggestion_utf8}'
-
-        msg = f'Subject: {subject}\n\n{body}'
-
-        smtp.sendmail(EMAIL_ADDRESS, EMAIL_ADDRESS, msg)
+        smtp.send_message(msg)
 
 if __name__ == "__main__":
     app.run(debug=True)
