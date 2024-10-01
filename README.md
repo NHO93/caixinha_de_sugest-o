@@ -19,7 +19,7 @@ Este projeto é uma aplicação web simples onde os usuários podem enviar suges
 1. **Clone o repositório:**
    ```bash
    git clone https://github.com/NHO93/caixinha_de_sugestao.git
-   cd sistema-caixinha-sugestao
+   cd caixinha_de_sugestao
    ```
 
 2. **Crie um ambiente virtual (opcional, mas recomendado):**
@@ -28,7 +28,7 @@ Este projeto é uma aplicação web simples onde os usuários podem enviar suges
    source venv/bin/activate  # No Windows: venv\Scripts\activate
    ```
 
-3. **Instale as dependência (Não foi instalada nessa aplicação, mas é recomendado usar):**
+3. **Instale as dependências:**
    ```bash
    pip install -r requirements.txt
    ```
@@ -52,11 +52,56 @@ Este projeto é uma aplicação web simples onde os usuários podem enviar suges
 
 - Acesse a página inicial da aplicação.
 - Digite sua sugestão no campo de texto e clique no botão "Enviar Sugestão".
-- Uma mensagem de sucesso será exibida, confirmando que sua sugestão foi enviada com sucesso.
+- Uma mensagem de sucesso será exibida na mesma página, confirmando que sua sugestão foi enviada com sucesso.
 
 ## Segurança
 
 Certifique-se de que o arquivo `.env`, contendo suas credenciais de e-mail, **não seja adicionado ao Git**. O projeto já inclui um arquivo `.gitignore` que impede que esse arquivo seja enviado para o repositório.
+
+---
+
+### Deploy no Vercel
+
+Para realizar o deploy da sua aplicação no Vercel, siga os passos abaixo:
+
+1. **Instalar a CLI do Vercel:**
+   ```bash
+   npm install -g vercel
+   ```
+
+2. **Criar o arquivo `vercel.json`:**
+   Na raiz do projeto, crie um arquivo chamado `vercel.json` com o seguinte conteúdo:
+   ```json
+   {
+     "version": 2,
+     "builds": [
+       {
+         "src": "app.py",
+         "use": "@vercel/python"
+       }
+     ],
+     "routes": [
+       {
+         "src": "/(.*)",
+         "dest": "app.py"
+       }
+     ]
+   }
+   ```
+
+3. **Configurar as variáveis de ambiente no Vercel:**
+   - Acesse o painel de controle do Vercel.
+   - Vá até sua aplicação e clique em "Settings" > "Environment Variables".
+   - Adicione suas variáveis de ambiente `EMAIL_USER` e `EMAIL_PASS` com os valores apropriados.
+
+4. **Fazer o Deploy:**
+   No terminal, execute:
+   ```bash
+   vercel
+   ```
+
+5. **Verificar o Deploy:**
+   Após o processo de deploy, um link será gerado. Acesse esse link no navegador para verificar se sua aplicação Flask está funcionando corretamente.
 
 ---
 
@@ -67,4 +112,4 @@ Certifique-se de que o arquivo `.env`, contendo suas credenciais de e-mail, **n�
 
 ---
 
-Agora o sistema está pronto para ser utilizado!
+Agora o sistema está pronto para ser utilizado e também pode ser facilmente hospedado no Vercel!
