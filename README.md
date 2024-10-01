@@ -1,7 +1,3 @@
-Aqui está um README simples explicando como utilizar o sistema de caixinha de sugestão:
-
----
-
 # Sistema de Caixinha de Sugestão Anônima
 
 Este projeto é uma aplicação web simples onde os usuários podem enviar sugestões de forma anônima. As sugestões são enviadas diretamente para um e-mail configurado, sem o uso de um banco de dados. A aplicação é desenvolvida com **Python (Flask)** e estilizada com **CSS responsivo**.
